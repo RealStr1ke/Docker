@@ -1,0 +1,32 @@
+version: '2.1'
+services:
+    calibre:
+        image: 'lscr.io/linuxserver/calibre:latest'
+        container_name: calibre
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/Montreal
+            # - PASSWORD= # Optional, if you want to use a password
+            # - CLI_ARGS= # Optional, if you want to pass arguments to calibre
+        volumes:
+            - './calibre/config:/config'
+        ports:
+            - '8080:8080'
+            - '8081:8081'
+        restart: unless-stopped
+    calibre-web:
+        image: 'lscr.io/linuxserver/calibre-web:latest'
+        container_name: calibre-web
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - TZ=America/Montreal
+            - OAUTHLIB_RELAX_TOKEN_SCOPE=1
+            # - DOCKER_MODS=linuxserver/mods:universal-calibre #optional
+        volumes:
+            - './calibre-web/config:/config'
+            - './calibre/Calibre Library:/books'
+        ports:
+            - '8083:8083'
+        restart: unless-stopped
